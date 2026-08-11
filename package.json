@@ -1,0 +1,43 @@
+{
+  "name": "local-video-forge",
+  "version": "1.0.0",
+  "description": "Local desktop video editor (Electron + React + TypeScript) wrapping ffmpeg operations.",
+  "private": true,
+  "main": "dist-electron/main/main.js",
+  "scripts": {
+    "dev:renderer": "vite",
+    "dev:electron": "tsc -p tsconfig.electron.json -w",
+    "dev": "concurrently -k -n VITE,ELECTRON,APP \"npm:dev:renderer\" \"npm:dev:electron\" \"wait-on tcp:5173 dist-electron/main/main.js && electron .\"",
+    "build:renderer": "vite build",
+    "build:electron": "tsc -p tsconfig.electron.json",
+    "build": "npm run build:renderer && npm run build:electron",
+    "start": "electron .",
+    "package": "npm run build && npx --yes electron-builder"
+  },
+  "dependencies": {
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@types/node": "^26.2.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "@vitejs/plugin-react": "^6.0.5",
+    "concurrently": "^10.0.4",
+    "electron": "^43.3.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.2.1",
+    "wait-on": "^9.1.0"
+  },
+  "build": {
+    "appId": "com.local.videoforge",
+    "productName": "Video Forge",
+    "files": [
+      "dist/**",
+      "dist-electron/**"
+    ],
+    "directories": {
+      "output": "release"
+    }
+  }
+}
