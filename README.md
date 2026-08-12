@@ -1,179 +1,255 @@
-# Video Forge
+<div align="center">
 
-A local desktop video editor UI that wraps `ffmpeg` for six operations:
-Convert, Change Speed, Pan & Crop, Add Music, Mute, and Extract Audio.
-Electron + React + TypeScript, strict OOP core, single-window app.
+<img src="docs/assets/banner.svg" alt="VideoForge" width="100%" />
 
-## Why Electron, not plain React
+<br/>
 
-A browser page (plain React/Next/whatever) cannot spawn `ffmpeg`, read
-arbitrary paths on your disk, or open native "Save As" dialogs — browsers
-sandbox all of that away deliberately. The actual dependency your scripts
-have is **ffmpeg**, not Python, so the fix isn't "run Python somehow inside
-React" — it's pairing the React UI with a Node.js process that can shell out
-to ffmpeg and touch the filesystem. Electron packages exactly that pairing
-into one local desktop app: same React UI, plus a Node "main process" for
-everything OS-level. (The alternative — a local Python/FastAPI server the
-React page talks to over HTTP — also works, but ships an extra
-server-lifecycle problem for a single-user local tool with no upside.)
+<!-- badges -->
+<img src="https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript" />
+<img src="https://img.shields.io/badge/React-19-149ECA?style=flat-square&logo=react&logoColor=white" alt="React 19" />
+<img src="https://img.shields.io/badge/Electron-43-47848F?style=flat-square&logo=electron&logoColor=white" alt="Electron 43" />
+<img src="https://img.shields.io/badge/Vite-8-646CFF?style=flat-square&logo=vite&logoColor=white" alt="Vite 8" />
+<img src="https://img.shields.io/badge/ffmpeg-required-007808?style=flat-square&logo=ffmpeg&logoColor=white" alt="ffmpeg required" />
+<img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="MIT License" />
+<img src="https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Linux-lightgrey?style=flat-square" alt="Cross platform" />
 
-## Setup
+<br/><br/>
+
+**A local, private, ffmpeg-powered desktop video editor.**
+No uploads, no accounts, no cloud rendering — your files never leave your machine.
+
+<br/>
+
+<a href="#-quick-start">
+  <img src="https://img.shields.io/badge/▶_Quick_Start-0071e3?style=for-the-badge&logoColor=white" alt="Quick Start" />
+</a>
+<a href="#-features">
+  <img src="https://img.shields.io/badge/✦_Features-1d1d1f?style=for-the-badge&logoColor=white" alt="Features" />
+</a>
+<a href="#-architecture">
+  <img src="https://img.shields.io/badge/⬡_Architecture-1d1d1f?style=for-the-badge&logoColor=white" alt="Architecture" />
+</a>
+<a href="#-scripts">
+  <img src="https://img.shields.io/badge/⌘_Scripts-1d1d1f?style=for-the-badge&logoColor=white" alt="Scripts" />
+</a>
+
+</div>
+
+<br/>
+
+## Contents
+
+- [Screenshots](#-screenshots)
+- [Features](#-features)
+- [Quick Start](#-quick-start)
+- [Requirements](#-requirements)
+- [Architecture](#-architecture)
+- [Project Structure](#-project-structure)
+- [Scripts](#-scripts)
+- [Change Speed, in detail](#-change-speed-in-detail)
+- [Production Build](#-production-build)
+- [Design System](#-design-system)
+- [Roadmap to Public Production](#-roadmap-to-public-production)
+- [License](#-license)
+
+<br/>
+
+## 📸 Screenshots
+
+<table>
+<tr>
+<td width="50%">
+<img src="docs/screenshots/operation-picker.png" alt="Operation picker" width="100%" />
+<p align="center"><sub>Six operations, one consistent card grid — pick an operation, its settings appear below.</sub></p>
+</td>
+<td width="50%">
+<img src="docs/screenshots/speed-control.png" alt="Speed control panel" width="100%" />
+<p align="center"><sub>The new Speed operation — percent slider, quick presets, exact value, pitch-preserve toggle.</sub></p>
+</td>
+</tr>
+</table>
+
+<br/>
+
+## ✦ Features
+
+<table>
+<tr>
+<td width="60" align="center"><img src="docs/assets/icon-convert.svg" width="34" /></td>
+<td><strong>Convert</strong><br/><sub>Transcode to H.265, H.264, VP9, AV1, AVIF, or GIF — four quality presets from "ultra compress" to "near lossless."</sub></td>
+</tr>
+<tr>
+<td align="center"><img src="docs/assets/icon-speed.svg" width="34" /></td>
+<td><strong>Speed</strong><br/><sub>Slow down or speed up anywhere from 5% to 1000%, via a slider, quick presets (0.25×–4×), or an exact percentage. Pitch-preserving by default.</sub></td>
+</tr>
+<tr>
+<td align="center"><img src="docs/assets/icon-crop.svg" width="34" /></td>
+<td><strong>Pan &amp; Crop</strong><br/><sub>Reframe to any aspect ratio (9:16, 4:5, 1:1, 16:9, or custom) with an animated pan across the leftover frame instead of a static crop.</sub></td>
+</tr>
+<tr>
+<td align="center"><img src="docs/assets/icon-music.svg" width="34" /></td>
+<td><strong>Add Music</strong><br/><sub>Lay a track under a video, automatically trimmed or silence-padded to match its exact length.</sub></td>
+</tr>
+<tr>
+<td align="center"><img src="docs/assets/icon-mute.svg" width="34" /></td>
+<td><strong>Mute</strong><br/><sub>Strip the audio track with a stream copy — no re-encode, no quality loss, near-instant.</sub></td>
+</tr>
+<tr>
+<td align="center"><img src="docs/assets/icon-audio.svg" width="34" /></td>
+<td><strong>Extract Audio</strong><br/><sub>Pull the highest-quality MP3 out of any video, with selectable bitrate and mono downmix.</sub></td>
+</tr>
+</table>
+
+Every operation supports **batch mode** (except Add Music, which inherently needs one video + one track): select multiple clips, pick a destination folder once, and every output is named automatically with collision-safe suffixes.
+
+<br/>
+
+## 🚀 Quick Start
 
 ```bash
+# 1. Install dependencies
 npm install
-npm run dev        # hot-reloading dev app (Vite + Electron)
+
+# 2. Launch the app (opens its own window — not a browser tab)
+npm run dev
 ```
 
-You also need `ffmpeg` and `ffprobe` on your PATH:
+That's it. A desktop window titled **VideoForge** opens on its own. Don't visit `localhost:5173` in a browser — that's just the internal dev server; opening it directly gives you the UI with none of the filesystem/ffmpeg access, since only the Electron window has the bridge wired in.
 
-```bash
-# macOS
-brew install ffmpeg
-# Ubuntu/Debian
-sudo apt install ffmpeg
-# Windows
-winget install ffmpeg
-```
+<br/>
 
-The app checks for both on launch and shows a red/green dot in the header.
+## 📋 Requirements
 
-### Production build
+| Requirement | Notes |
+|---|---|
+| **Node.js** | 18+ recommended |
+| **ffmpeg** + **ffprobe** | Must be on your `PATH` — the app checks on launch and shows a status dot in the header |
 
-```bash
-npm run build       # compiles main+preload, builds the renderer
-npm run package      # builds installers via electron-builder, fetched
-                      # on-demand with npx — see note below
-```
+<details>
+<summary><strong>Installing ffmpeg</strong></summary>
 
-**Why `electron-builder` isn't in `package.json`:** every current Electron
-packaging tool (`electron-builder`, and even the officially-recommended
-`@electron-forge/cli` — I tested both) pulls in a handful of old transitive
-packages (`glob@7`, `inflight`, `rimraf@2/3`, `boolean`) via
-`@electron/get`/`node-gyp`-adjacent internals that haven't been modernized
-upstream. It's not something fixable from this project's `package.json` —
-it's the same in a brand-new empty project with either tool installed.
-Since you only need a packager when cutting an installer, not for day-to-day
-`npm install`/`npm run dev`, it's kept out of `devDependencies` entirely and
-fetched on demand via `npx` only when you actually run `npm run package`.
-That keeps every dependency `npm install` resolves at latest, with zero
-deprecation warnings.
+<br/>
 
-## Architecture
+| OS | Command |
+|---|---|
+| macOS | `brew install ffmpeg` |
+| Ubuntu / Debian | `sudo apt install ffmpeg` |
+| Windows | `winget install ffmpeg` |
+
+</details>
+
+<br/>
+
+## ⬡ Architecture
+
+<img src="docs/assets/architecture.svg" alt="Architecture diagram" width="100%" />
+
+The renderer (React) **never** touches the filesystem or spawns processes directly — `contextIsolation` and `sandbox` are both on. Everything crosses through a single typed bridge, `window.api`, exposed by `preload.ts`. On the other side, the main process has exactly one authority for each concern:
+
+| Concern | Owner | Why it's centralized |
+|---|---|---|
+| **Naming output files** | `OutputResolver` | Single-file "Save As" and multi-clip "export to folder" both resolve through the same collision-safe naming policy — no operation invents its own suffix convention. |
+| **Running ffmpeg** | `JobQueueManager` | Caps concurrency (2 jobs at once, tunable), queues the rest, owns cancellation, emits the only progress/done events in the app. |
+| **ffmpeg argument-building** | `FfmpegJob` subclasses | One class per operation (`ConvertVideoJob`, `ChangeSpeedJob`, `PanCropJob`, …), each implementing just `buildArgs()`. Adding a 7th operation means adding one class + one catalog entry — nothing else changes. |
+
+<br/>
+
+## 🗂 Project Structure
 
 ```
 src/
-  shared/                  # types + operation catalog — the ONE contract
-    types.ts                 both processes and every component import
-    operationCatalog.ts       from. Change an operation's suffix/extension
-                               here and main + renderer both pick it up.
-
-  main/                     # Node process — the only place that touches
-    main.ts                    fs, child_process, or native dialogs.
-    preload.ts                Thin IPC layer only; no business logic.
-    ffmpeg/
-      FfmpegJob.ts            Abstract base class: spawns ffmpeg, parses
-                              `-progress pipe:1`, reports %, resolves
-                              ok/error. Every operation subclasses this and
-                              only implements buildArgs() — argv + expected
-                              duration. Adding a 7th operation means adding
-                              one small class here, nothing else changes.
-      ConvertVideoJob.ts      } one class per operation, each ported 1:1
-      ExtractAudioJob.ts      } from the original Python script's ffmpeg
-      MuteVideoJob.ts         } logic (same flags, same filter math).
-      PanCropJob.ts           }
-      MergeMusicJob.ts        }
-      ChangeSpeedJob.ts       } NEW: speed control (see below).
-      JobFactory.ts           Maps an operation kind -> its Job class.
-      probe.ts                ffprobe wrapper (duration/streams/etc).
-    services/
-      OutputResolver.ts      The ONLY place output filenames/paths are
-                              decided — single-file naming, batch naming
-                              into a folder with collision-avoidance
-                              ("file (2).mp4"), and pre-flight validation.
-                              Both the "Save As" flow and the "export N
-                              clips to a folder" flow go through this, so
-                              there is exactly one naming policy in the app
-                              (previously every script picked its own
-                              suffix ad hoc — `_no_audio.mp4` here,
-                              `.with_suffix(".mp3")` there).
-      JobQueueManager.ts      The ONLY place that runs ffmpeg jobs. Caps
-                              concurrency (2 at once, tunable), queues the
-                              rest, owns cancellation, emits progress/done
-                              events. main.ts is now a thin IPC layer over
-                              this — it doesn't run anything itself.
-
-  renderer/                 # React UI — talks to window.api ONLY, never
-                             # to Node/fs directly (contextIsolation: true,
-                             # sandbox: true).
-    state/
-      Store.ts                Tiny observable-snapshot base class
-                              (useSyncExternalStore-compatible).
-      ClipLibrary.ts          Single source of truth for imported clips +
-                              selection. Every panel reads from this, so
-                              selecting a clip anywhere updates everywhere.
-      JobQueueStore.ts        Mirrors JobQueueManager on the renderer side;
-                              subscribes to progress/done exactly once.
-      hooks.ts                useClipLibrary() / useJobQueue() — the only
-                              two hooks components need for shared state.
-    components/
-      ClipBin.tsx             Left panel: import, list, select clips.
-      OperationPanel.tsx      Center: operation picker + per-operation
-                              option form + export/run.
-      JobQueue.tsx            Bottom "reel strip": live queue with
-                              progress bars, cancel, and results.
+├─ shared/                    # The ONE contract both processes import
+│  ├─ types.ts                  Every IPC payload, typed
+│  └─ operationCatalog.ts       Operation metadata (title, suffix, ext, batch support)
+│
+├─ main/                      # Node process — the only code that touches
+│  │                          # fs, child_process, or native dialogs
+│  ├─ main.ts                   Thin IPC layer, wires dialogs + services
+│  ├─ preload.ts                contextBridge — the only surface the UI sees
+│  ├─ ffmpeg/
+│  │  ├─ FfmpegJob.ts            Abstract base: spawn, parse -progress, resolve
+│  │  ├─ ConvertVideoJob.ts   ┐
+│  │  ├─ ExtractAudioJob.ts   │  One class per operation, each ported 1:1
+│  │  ├─ MuteVideoJob.ts      │  from the original ffmpeg command-line logic
+│  │  ├─ PanCropJob.ts        │
+│  │  ├─ MergeMusicJob.ts     │
+│  │  ├─ ChangeSpeedJob.ts    ┘  atempo-chained, pitch-preserving speed control
+│  │  ├─ JobFactory.ts          Maps an operation kind → its Job class
+│  │  └─ probe.ts               ffprobe wrapper
+│  └─ services/
+│     ├─ OutputResolver.ts      The ONLY place output paths are decided
+│     └─ JobQueueManager.ts     The ONLY place ffmpeg jobs are run
+│
+└─ renderer/                  # React UI — talks to window.api only
+   ├─ state/
+   │  ├─ Store.ts                Tiny observable-snapshot base class
+   │  ├─ ClipLibrary.ts          Imported clips + selection, single source of truth
+   │  └─ JobQueueStore.ts        Mirrors JobQueueManager on the UI side
+   └─ components/
+      ├─ ClipBin.tsx             Left panel — import, list, select clips
+      ├─ OperationPanel.tsx      Center — operation picker + settings + run
+      └─ JobQueue.tsx            Bottom — live queue, progress, cancel, results
 ```
 
-### Why this shape
+<br/>
 
-- **One naming authority, one execution authority.** Before this pass, each
-  script decided its own output name and there was no shared concurrency
-  control — fine for a CLI run once, not for a UI where you might select 20
-  clips and click Run. `OutputResolver` and `JobQueueManager` fix that by
-  being the single place each concern lives, on the main-process side where
-  the filesystem and process spawning actually happen.
-- **One typed contract (`shared/types.ts` + `operationCatalog.ts`).** The
-  renderer can't send a shape ffmpeg-jobs don't expect, and adding an
-  operation's metadata (title, suffix, default extension, batch support) in
-  one place drives both the picker UI and the backend's file naming.
-- **Renderer state mirrors main-process state, not the DOM.** `ClipLibrary`
-  and `JobQueueStore` are plain TS classes with a pub-sub snapshot, wired to
-  React via `useSyncExternalStore` — components render off one source of
-  truth instead of prop-drilling or duplicating state per screen.
-- **Batch export "just works"** because every operation flows through the
-  same two paths in `OperationPanel`: 1 clip selected → native Save-As
-  dialog; 2+ clips selected → pick a folder, `resolveBatchOutputs` names
-  every file safely. `mergeMusic` opts out of batch (`supportsBatch: false`
-  in the catalog) since it inherently needs one video + one music file.
+## ⌘ Scripts
 
-## New feature: Change Speed
+| Command | What it does |
+|---|---|
+| `npm run dev` | Launches the full dev app — Vite, a TypeScript watcher for the backend, and the Electron window, together |
+| `npm run build` | Production build of both the renderer bundle and the compiled main/preload process |
+| `npm start` | Runs the production build (`npm run build` first) |
+| `npm run package` | Builds platform installers via `electron-builder`, fetched on demand with `npx` |
 
-`ChangeSpeedJob` accepts any positive rate (UI exposes it as a % slider —
-10% to 400%, plus quick presets and an exact-number field, matching "1x,
-2x, 10%, 80%" from the brief). Implementation:
+<br/>
 
-- **Video:** `setpts=(1/rate)*PTS` — scales presentation timestamps.
-- **Audio, pitch-preserved (default):** ffmpeg's `atempo` filter only
-  accepts 0.5–2.0 per stage, so rates outside that range are achieved by
-  **chaining multiple `atempo` stages** that multiply out to the requested
-  rate (e.g. 4x = `atempo=2.0,atempo=2.0`) — the standard trick for going
-  beyond ffmpeg's single-stage limit without pitch artifacts.
-- **Audio, pitch not preserved (toggle):** `asetrate` + `aresample`,
-  giving the classic tape speed-up/slow-down chipmunk/demon effect.
+## 🐇 Change Speed, in detail
 
-## What "production ready" would still need
+The playback-rate UI is a percent slider (10%–400%) with presets and an exact-number field — feed it `1x`, `2x`, `10%`, `80%`, whatever's easiest.
 
-This is a solid, correctly-architected local tool, but a few things are
-worth being upfront about if you intend to ship it beyond your own machine:
+- **Video** — `setpts=(1/rate)*PTS` scales presentation timestamps directly.
+- **Audio, pitch-preserved** *(default)* — ffmpeg's `atempo` filter only accepts 0.5–2.0 per stage, so rates outside that range are reached by **chaining multiple `atempo` stages** that multiply out to the requested rate (e.g. 4× = `atempo=2.0,atempo=2.0`) — the standard way to go beyond ffmpeg's single-stage limit without pitch artifacts.
+- **Audio, pitch not preserved** *(toggle)* — `asetrate` + `aresample`, giving the classic tape speed-up/slow-down effect.
 
-- **Code signing & auto-update** (electron-builder supports both, not
-  configured here — needs your Apple/Windows signing certs).
-- **Bundling ffmpeg** instead of requiring it on PATH, if you want
-  non-technical users to just install one app (e.g. `ffmpeg-static`,
-  ~80MB added to the installer per platform).
-- **Automated tests** — the ffmpeg argument-building logic in each `*Job.ts`
-  is pure and easy to unit test (no tests included here to keep scope
-  focused on the architecture you asked for).
-- **Thumbnails** in the media bin currently show a placeholder icon, not a
-  real frame grab (an easy ffmpeg `-ss ... -frames:v 1` addition to `probe.ts`
-  if you want it).
-- **Crash/telemetry reporting** if this leaves "just for me" territory.
+<br/>
+
+## 📦 Production Build
+
+```bash
+npm run build       # compiles main + preload, builds the renderer
+npm run package      # builds installers via electron-builder (fetched on demand)
+```
+
+> **Why `electron-builder` isn't a direct dependency:** every current Electron packaging tool — `electron-builder`, and even the officially-recommended `@electron-forge/cli` — pulls in a handful of old transitive packages via `@electron/get` internals that haven't been modernized upstream. Since you only need a packager when cutting an installer, it's fetched on demand via `npx` only when `npm run package` runs, keeping `npm install` itself at zero deprecation warnings.
+
+<br/>
+
+## 🎨 Design System
+
+One neutral scale, one accent color, one typeface. Every color pair clears **WCAG AA** (4.5:1 for body text, 3:1 for large/UI text) — see the token comments at the top of `src/renderer/styles/global.css` for the full contrast rationale.
+
+<br/>
+
+## 🗺 Roadmap to Public Production
+
+This is a correctly-architected local tool, but shipping it *beyond your own machine* would still want:
+
+- [ ] Code signing & auto-update (`electron-builder` supports both — needs your signing certs)
+- [ ] Bundling ffmpeg itself (e.g. `ffmpeg-static`) instead of requiring it on `PATH`
+- [ ] Automated tests — the ffmpeg argument-building logic in each `*Job.ts` is pure and easy to unit test
+- [ ] Real thumbnail generation in the media bin (currently a placeholder icon)
+- [ ] Crash/telemetry reporting
+
+<br/>
+
+## 📄 License
+
+Released under the [MIT License](LICENSE).
+
+<div align="center">
+<br/>
+<img src="docs/assets/logo.svg" width="40" />
+<br/>
+<sub>Built with ffmpeg, Electron, React, and TypeScript.</sub>
+</div>
