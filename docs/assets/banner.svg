@@ -1,32 +1,30 @@
 <svg width="960" height="220" viewBox="0 0 960 220" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="960" y2="220" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#0a0e14"/>
-      <stop offset="1" stop-color="#111726"/>
-    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="-10%" r="80%">
+      <stop offset="0" stop-color="#7c8891" stop-opacity="0.10"/>
+      <stop offset="1" stop-color="#08090b" stop-opacity="0"/>
+    </radialGradient>
   </defs>
-  <rect width="960" height="220" rx="20" fill="url(#bg)"/>
+  <rect width="960" height="220" fill="#08090b"/>
+  <rect width="960" height="220" fill="url(#glow)"/>
+  <rect x="0.5" y="0.5" width="959" height="219" fill="none" stroke="#1b1e22" stroke-width="1"/>
 
-  <!-- subtle sprocket strip, echoes the in-app "reel" motif -->
-  <g fill="#ffffff" opacity="0.06">
-    <circle cx="24" cy="24" r="4"/><circle cx="48" cy="24" r="4"/><circle cx="72" cy="24" r="4"/>
-    <circle cx="24" cy="196" r="4"/><circle cx="48" cy="196" r="4"/><circle cx="72" cy="196" r="4"/>
-    <circle cx="888" cy="24" r="4"/><circle cx="912" cy="24" r="4"/><circle cx="936" cy="24" r="4"/>
-    <circle cx="888" cy="196" r="4"/><circle cx="912" cy="196" r="4"/><circle cx="936" cy="196" r="4"/>
-  </g>
-
-  <!-- logo tile -->
+  <!-- logo mark -->
   <g transform="translate(100,60)">
-    <rect x="0" y="0" width="100" height="100" rx="26" fill="#0071e3"/>
-    <path d="M39 31L66 50L39 69V31Z" fill="#ffffff"/>
-    <path d="M24 50H31" stroke="#ffffff" stroke-width="6" stroke-linecap="round" opacity="0.55"/>
+    <circle cx="50" cy="50" r="46" stroke="#2a2e33" stroke-width="1" fill="none"/>
+    <circle cx="50" cy="50" r="33" stroke="#7c8891" stroke-width="1" fill="none" opacity="0.6"/>
+    <path d="M31 25H25v6" stroke="#c9cfd2" stroke-width="1.6" fill="none"/>
+    <path d="M69 25h6v6" stroke="#c9cfd2" stroke-width="1.6" fill="none"/>
+    <path d="M31 75H25v-6" stroke="#c9cfd2" stroke-width="1.6" fill="none"/>
+    <path d="M69 75h6v-6" stroke="#c9cfd2" stroke-width="1.6" fill="none"/>
+    <path d="M43 38L64 50L43 62V38Z" fill="#c9cfd2"/>
   </g>
 
   <!-- wordmark -->
-  <text x="240" y="112" font-family="Arial, Helvetica, sans-serif" font-size="52" font-weight="700" fill="#ffffff">
-    Video<tspan fill="#3b9dff">Forge</tspan>
+  <text x="240" y="112" font-family="'Cormorant Garamond', Georgia, serif" font-size="52" font-weight="500" fill="#e6e3da">
+    Video<tspan font-style="italic" fill="#c9cfd2">Forge</tspan>
   </text>
-  <text x="242" y="146" font-family="Arial, Helvetica, sans-serif" font-size="18" fill="#8a94a6">
-    A local, ffmpeg-powered desktop video editor — Electron · React · TypeScript
+  <text x="242" y="145" font-family="'Jost', Arial, sans-serif" font-size="12.5" letter-spacing="3" fill="#7f8589">
+    A LOCAL, FFMPEG-POWERED DESKTOP VIDEO EDITOR &#8212; ELECTRON &#183; REACT &#183; TYPESCRIPT
   </text>
 </svg>

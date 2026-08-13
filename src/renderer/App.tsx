@@ -12,7 +12,7 @@ import { Logo, IconAlert } from "./icons/Icons";
 function BridgeMissingScreen() {
   return (
     <div className="diagnostic-screen">
-      <IconAlert size={30} className="tabular" />
+      <IconAlert size={30} className="diagnostic-icon" />
       <div className="diagnostic-title">Can&rsquo;t reach the app backend</div>
       <p className="diagnostic-body">
         <code>window.api</code> was never attached, which means the Electron preload script didn&rsquo;t run. This
@@ -58,7 +58,9 @@ export default function App() {
         <div className="brand">
           <Logo />
           <div className="brand-text">
-            <span className="brand-mark">VideoForge</span>
+            <span className="brand-mark">
+              Video<em>Forge</em>
+            </span>
             <span className="brand-sub">Local ffmpeg toolkit</span>
           </div>
         </div>

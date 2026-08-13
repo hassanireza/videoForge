@@ -17,24 +17,24 @@ const base = (size = 18) => ({
 });
 
 /**
- * Brand mark for VideoForge. A rounded-square tile (matches the app's own
- * card radius language) containing a play triangle cut by a single motion
- * chevron — reads as "video" + "speed/transform" at a glance, the two
- * concepts the app is actually built around. Flat, single accent fill,
- * no gradients.
+ * Brand mark for VideoForge, drawn from the same visual language as the
+ * portfolio brand it now shares an identity with: hairline strokes only
+ * (no fills, no rounded soft shapes, no gradients), a thin concentric ring
+ * echoing the brand's halo motif, and a viewfinder/aperture bracket standing
+ * in for "video" — the corners of a camera frame rather than a play button.
  */
 export function Logo({ size = 30, className }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" className={className} aria-hidden="true">
-      <rect x="1" y="1" width="30" height="30" rx="9" fill="var(--accent)" />
-      <path d="M12.5 10.5L21 16L12.5 21.5V10.5Z" fill="#ffffff" />
-      <path
-        d="M7.5 16H10.5"
-        stroke="#ffffff"
-        strokeWidth="2"
-        strokeLinecap="round"
-        opacity="0.55"
-      />
+      <circle cx="16" cy="16" r="14.5" stroke="var(--border-hover)" strokeWidth="1" fill="none" />
+      <circle cx="16" cy="16" r="10.5" stroke="var(--accent)" strokeWidth="1" fill="none" opacity="0.6" />
+      {/* viewfinder corner brackets */}
+      <path d="M10 8H8v2" stroke="var(--accent-bright)" strokeWidth="1.3" fill="none" />
+      <path d="M22 8h2v2" stroke="var(--accent-bright)" strokeWidth="1.3" fill="none" />
+      <path d="M10 24H8v-2" stroke="var(--accent-bright)" strokeWidth="1.3" fill="none" />
+      <path d="M22 24h2v-2" stroke="var(--accent-bright)" strokeWidth="1.3" fill="none" />
+      {/* single aperture blade, off-center — the one asymmetry in an otherwise centered mark */}
+      <path d="M14.5 12.5L20 16L14.5 19.5V12.5Z" fill="var(--accent-bright)" />
     </svg>
   );
 }

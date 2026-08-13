@@ -5,13 +5,13 @@
 <br/>
 
 <!-- badges -->
-<img src="https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript" />
-<img src="https://img.shields.io/badge/React-19-149ECA?style=flat-square&logo=react&logoColor=white" alt="React 19" />
-<img src="https://img.shields.io/badge/Electron-43-47848F?style=flat-square&logo=electron&logoColor=white" alt="Electron 43" />
-<img src="https://img.shields.io/badge/Vite-8-646CFF?style=flat-square&logo=vite&logoColor=white" alt="Vite 8" />
-<img src="https://img.shields.io/badge/ffmpeg-required-007808?style=flat-square&logo=ffmpeg&logoColor=white" alt="ffmpeg required" />
-<img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="MIT License" />
-<img src="https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Linux-lightgrey?style=flat-square" alt="Cross platform" />
+<img src="https://img.shields.io/badge/TypeScript-5.x-2a2e33?style=flat-square&logo=typescript&logoColor=c9cfd2" alt="TypeScript" />
+<img src="https://img.shields.io/badge/React-19-2a2e33?style=flat-square&logo=react&logoColor=c9cfd2" alt="React 19" />
+<img src="https://img.shields.io/badge/Electron-43-2a2e33?style=flat-square&logo=electron&logoColor=c9cfd2" alt="Electron 43" />
+<img src="https://img.shields.io/badge/Vite-8-2a2e33?style=flat-square&logo=vite&logoColor=c9cfd2" alt="Vite 8" />
+<img src="https://img.shields.io/badge/ffmpeg-required-2a2e33?style=flat-square&logo=ffmpeg&logoColor=c9cfd2" alt="ffmpeg required" />
+<img src="https://img.shields.io/badge/license-MIT-2a2e33?style=flat-square" alt="MIT License" />
+<img src="https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20%7C%20Linux-2a2e33?style=flat-square" alt="Cross platform" />
 
 <br/><br/>
 
@@ -21,16 +21,16 @@ No uploads, no accounts, no cloud rendering — your files never leave your mach
 <br/>
 
 <a href="#-quick-start">
-  <img src="https://img.shields.io/badge/▶_Quick_Start-0071e3?style=for-the-badge&logoColor=white" alt="Quick Start" />
+  <img src="https://img.shields.io/badge/▶_Quick_Start-7c8891?style=for-the-badge&logoColor=08090b" alt="Quick Start" />
 </a>
 <a href="#-features">
-  <img src="https://img.shields.io/badge/✦_Features-1d1d1f?style=for-the-badge&logoColor=white" alt="Features" />
+  <img src="https://img.shields.io/badge/✦_Features-08090b?style=for-the-badge&logoColor=c9cfd2" alt="Features" />
 </a>
 <a href="#-architecture">
-  <img src="https://img.shields.io/badge/⬡_Architecture-1d1d1f?style=for-the-badge&logoColor=white" alt="Architecture" />
+  <img src="https://img.shields.io/badge/⬡_Architecture-08090b?style=for-the-badge&logoColor=c9cfd2" alt="Architecture" />
 </a>
 <a href="#-scripts">
-  <img src="https://img.shields.io/badge/⌘_Scripts-1d1d1f?style=for-the-badge&logoColor=white" alt="Scripts" />
+  <img src="https://img.shields.io/badge/⌘_Scripts-08090b?style=for-the-badge&logoColor=c9cfd2" alt="Scripts" />
 </a>
 
 </div>
@@ -227,7 +227,20 @@ npm run package      # builds installers via electron-builder (fetched on demand
 
 ## 🎨 Design System
 
-One neutral scale, one accent color, one typeface. Every color pair clears **WCAG AA** (4.5:1 for body text, 3:1 for large/UI text) — see the token comments at the top of `src/renderer/styles/global.css` for the full contrast rationale.
+VideoForge's entire visual identity — palette, type, radius, motion — is drawn directly from **[hassanireza.github.io](https://hassanireza.github.io)**'s real design tokens (`src/styles/tokens.css`) and its `/branding` case study, not a generic dark theme:
+
+| Token | Value | Where it comes from |
+|---|---|---|
+| Background | `#08090b` / `#0d1013` / `#12161a` | Exact `--bg` / `--bg-2` / `--bg-3` |
+| Text | `#e6e3da` / `#9aa3a8` / `#7f8589` | Exact `--text` / `--text-2` / `--text-3` |
+| Accent | `#7c8891` → `#c9cfd2` on hover/active | Exact `--accent` / `--accent-bright` |
+| Display type | *Cormorant Garamond*, italic for emphasis | Exact `--font-display` |
+| Body type | Jost, uppercase + wide tracking for labels | Exact `--font-body` |
+| Radius | 2–3px on cards/buttons; 99px reserved only for floating chrome | Same "sharp everywhere, pill only for chrome" rule |
+| Borders | Hairline `rgba(214,219,222,.07)`, brightening to `.18` on hover | Same opacity-only border system |
+| Buttons | Idle → outline; hover **inverts** to solid accent, letter-spacing widens | Same motion as the site's `.submit-btn` |
+
+A few identity touches carried over deliberately: the wordmark splits roman + italic serif (`Video` / *Forge*) the same way the source splits first/last name; operation cards are numbered with `counter(op, decimal-leading-zero)` the same way their project cards are; the operation grid uses a 1px hairline-as-grid-gap technique straight from their palette/mark grids.
 
 <br/>
 
