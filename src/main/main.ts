@@ -1,11 +1,15 @@
-import { app, BrowserWindow, ipcMain, dialog } from "electron";
+import { app, BrowserWindow, ipcMain, dialog, Menu } from "electron";
 import path from "path";
 import { checkFfmpegAvailable, probeMedia } from "./ffmpeg/probe";
 import { JobQueueManager } from "./services/JobQueueManager";
 import { OutputResolver } from "./services/OutputResolver";
 import type { JobRequest, OperationKind } from "../shared/types";
 
-const isDev = !app.isPackaged;
+// Dev mode is opt-in via the `--dev` flag (set only by `npm run dev`), so that
+// `npm start` and packaged builds always load the compiled renderer.
+const isDev = !app.isPackaged && process.argv.includes("--dev");
+// DevTools never open automatically; set VIDEOFORGE_DEVTOOLS=1 to open them in dev.
+const openDevTools = isDev && process.env.VIDEOFORGE_DEVTOOLS === "1";
 const queue = new JobQueueManager(2);
 
 let mainWindow: BrowserWindow | null = null;
@@ -28,9 +32,9 @@ function createWindow() {
 
   if (isDev) {
     mainWindow.loadURL("http://localhost:5173");
-    mainWindow.webContents.openDevTools({ mode: "detach" });
+    if (openDevTools) mainWindow.webContents.openDevTools({ mode: "detach" });
   } else {
-    mainWindow.loadFile(path.join(__dirname, "../dist/index.html"));
+    mainWindow.loadFile(path.join(__dirname, "../../dist/index.html"));
   }
 
   mainWindow.on("closed", () => {
@@ -44,6 +48,7 @@ queue.on("progress", (e) => mainWindow?.webContents.send("job:progress", e));
 queue.on("done", (e) => mainWindow?.webContents.send("job:done", e));
 
 app.whenReady().then(() => {
+  if (!isDev && process.platform !== "darwin") Menu.setApplicationMenu(null);
   createWindow();
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();

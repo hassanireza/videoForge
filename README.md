@@ -114,12 +114,42 @@ Every operation runs in **batch** — select ten clips, pick one destination fol
 
 ## 🚀 Quick Start
 
+**1. Install the prerequisites** (once): [Node.js 18+](https://nodejs.org) and ffmpeg (see [Requirements](#-requirements)). Verify:
+
 ```bash
-npm install
-npm run dev
+node -v
+ffmpeg -version
+ffprobe -version
 ```
 
-A window opens on its own. That's the app — not a browser tab. If you're tempted to check `localhost:5173` in Chrome instead: don't. That address is just how Vite talks to the Electron window internally; opening it yourself gets you the interface with none of the filesystem or ffmpeg access wired in, since only the Electron window has that bridge attached.
+**2. Download the repo** — either click **Code → Download ZIP** on GitHub and unzip it, or:
+
+```bash
+git clone https://github.com/<your-username>/videoForge.git
+```
+
+**3. Open a terminal inside the project folder** (the one containing `package.json`):
+
+```bash
+cd videoForge        # or videoForge-main if you downloaded the ZIP
+```
+
+**4. Install dependencies:**
+
+```bash
+npm install
+```
+
+**5. Run the app** — pick one:
+
+| Goal | Command |
+|---|---|
+| Just use the app (builds, then opens it) | `npm start` |
+| Develop with hot reload | `npm run dev` |
+
+A desktop window opens on its own. That's the app — not a browser tab. Don't open `localhost:5173` in Chrome: that address is only how Vite feeds the Electron window in dev mode, and a plain browser has none of the filesystem or ffmpeg access.
+
+> **No DevTools window by default.** In dev mode, DevTools stay closed. To open them, press `Ctrl+Shift+I` (`Cmd+Opt+I` on macOS), or launch dev with `VIDEOFORGE_DEVTOOLS=1` set (e.g. `VIDEOFORGE_DEVTOOLS=1 npm run dev`; on Windows PowerShell: `$env:VIDEOFORGE_DEVTOOLS=1; npm run dev`).
 
 <br/>
 
@@ -202,9 +232,10 @@ src/
 
 | Command | What it does |
 |---|---|
-| `npm run dev` | The full dev app — Vite, a backend TypeScript watcher, and the Electron window, together |
+| `npm run dev` | The full dev app — Vite, a backend TypeScript watcher, and the Electron window, together (DevTools closed) |
 | `npm run build` | Production build of the renderer bundle and the compiled main/preload process |
-| `npm start` | Runs the production build |
+| `npm start` | Builds, then runs the production app |
+| `npm run launch` | Runs the already-built app without rebuilding |
 | `npm run package` | Builds platform installers via `electron-builder`, fetched on demand |
 
 <br/>

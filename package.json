@@ -6,13 +6,14 @@
   "main": "dist-electron/main/main.js",
   "scripts": {
     "dev:renderer": "vite",
-    "dev:electron": "tsc -p tsconfig.electron.json -w",
-    "dev": "concurrently -k -n VITE,ELECTRON,APP \"npm:dev:renderer\" \"npm:dev:electron\" \"wait-on tcp:5173 dist-electron/main/main.js && electron .\"",
+    "dev:electron": "tsc -p tsconfig.electron.json -w --preserveWatchOutput",
+    "dev": "concurrently -k -n VITE,TSC,APP \"npm:dev:renderer\" \"npm:dev:electron\" \"wait-on tcp:5173 file:dist-electron/main/main.js && electron . --dev\"",
     "build:renderer": "vite build",
     "build:electron": "tsc -p tsconfig.electron.json",
     "build": "npm run build:renderer && npm run build:electron",
-    "start": "electron .",
-    "package": "npm run build && npx --yes electron-builder"
+    "start": "npm run build && electron .",
+    "package": "npm run build && npx --yes electron-builder",
+    "launch": "electron ."
   },
   "dependencies": {
     "react": "^19.2.8",
